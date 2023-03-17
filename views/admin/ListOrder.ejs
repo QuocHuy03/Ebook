@@ -1,0 +1,82 @@
+<%- include('_layout/header.ejs') %> <%- include('_layout/nav.ejs') %>
+
+<div class="row mb-2">
+  <div class="col-sm-6"></div>
+  <!-- /.col -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">NHÓM ĐƠN HÀNG</h3>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <div class="table-responsive">
+          <table id="datatable1" class="table table-bordered table-striped">
+            <thead>
+              <tr class="text-center">
+                <th style="width: 5px">STT</th>
+                <th width="50">MDH</th>
+                <th>USERS</th>
+                <th>SERVICE</th>
+                <th>CODE</th>
+                <th width="40">ID</th>
+                <th>SERVER</th>
+                <th>QUANTITY</th>
+                <th>TOTAL</th>
+                <th>STATUS</th>
+                <th>TIME</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for(var i=0; i < dataOrders.length; i++) { %>
+              <tr>
+                <td class="text-center"><%= dataOrders[i].id %></td>
+                <td class="text-center" style="text-transform: lowercase">
+                  <%= dataOrders[i].code_order %>
+                </td>
+                <td class="text-center" style="text-transform: lowercase">
+                  <%= dataOrders[i].userId %>
+                </td>
+                <td class="text-center" style="text-transform: lowercase">
+                  <%= dataOrders[i].dich_vu %>
+                </td>
+                <td class="text-center" style="text-transform: lowercase">
+                  <%= dataOrders[i].code_service %>
+                </td>
+                <td class="text-center" style="text-transform: lowercase">
+                  <%= dataOrders[i].link %>
+                </td>
+                <td class="text-center"><%= dataOrders[i].server %></td>
+                <td class="text-center"><%= dataOrders[i].quantity %></td>
+                <td class="text-center"><%= dataOrders[i].total_price %></td>
+                <td class="text-center">
+                  <span
+                    class="<%= dataOrders[i].status == 'Đã Chạy' ? 'badge badge-success' : 'badge badge-primary' %>"
+                    ><%= dataOrders[i].status %></span
+                  >
+                </td>
+                <td class="text-center"><%= new Date(dataOrders[i].create_at).toLocaleString() %></td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- /.card-body -->
+      <div class="card-footer clearfix">VUI LÒNG THAO TÁC CẨN THẬN</div>
+    </div>
+    <!-- /.card -->
+  </div>
+  <!-- /.col -->
+</div>
+<!-- /.row huydeV -->
+<script>
+  $(function () {
+    $("#datatable1").DataTable();
+  });
+</script>
+<%- include('_layout/footer.ejs') %>

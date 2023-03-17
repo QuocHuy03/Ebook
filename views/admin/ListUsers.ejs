@@ -1,0 +1,72 @@
+<%- include('_layout/header.ejs') %> <%- include('_layout/nav.ejs') %>
+
+<div class="row mb-2">
+  <div class="col-sm-6"></div>
+  <!-- /.col -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">NHÓM THÀNH VIÊN</h3>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <div class="table-responsive">
+          <table id="datatable1" class="table table-bordered table-striped">
+            <thead>
+              <tr class="text-center">
+                <th style="width: 5px">STT</th>
+                <th>Tên Đăng Nhập</th>
+                <th>Địa Chỉ Email</th>
+                <th>Vai Trò</th>
+                <th>Số Dư</th>
+                <th>Ngày Tham Gia</th>
+                <th>Thao Tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for(var i=0; i < listUsers.length; i++) { %>
+              <tr>
+                <td class="text-center"><%= listUsers[i].id  %></td>
+                <td class="text-center" style="text-transform: lowercase">
+                  <%= listUsers[i].username %>
+                </td>
+                <td class="text-center" style="text-transform: lowercase">
+                  <%= listUsers[i].email %>
+                </td>
+                <td class="text-center" style="text-transform: lowercase">
+                  <%= listUsers[i].level %>
+                </td>
+                <td  class="text-center" style="text-transform: lowercase">
+                  <%= listUsers[i].money %>
+                </td>
+                <td class="text-center" width="200" style="text-transform: lowercase">
+                  <%= listUsers[i].create_date %>
+                </td>
+              <td class="text-center">
+                <a href="" class="btn btn-info">Edit</a>
+                <a href="" class="btn btn-danger">Edit</a>
+              </td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- /.card-body -->
+      <div class="card-footer clearfix">VUI LÒNG THAO TÁC CẨN THẬN</div>
+    </div>
+    <!-- /.card -->
+  </div>
+  <!-- /.col -->
+</div>
+<!-- /.row huydeV -->
+<script>
+  $(function () {
+    $("#datatable1").DataTable();
+  });
+</script>
+<%- include('_layout/footer.ejs') %>

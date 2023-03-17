@@ -1,0 +1,337 @@
+<%- include('_layout/header.ejs') %> <%- include('_layout/nav.ejs') %>
+
+<div class="row mb-2">
+  <div class="col-sm-6"></div>
+  <!-- /.col -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">NHÓM CẤU HÌNH THÔNG TIN</h3>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <div class="row">
+          <section class="col-lg-12">
+            <div class="card card-dark card-tabs">
+              <div class="card-header p-0 pt-1 border-bottom-0">
+                <ul
+                  class="nav nav-tabs"
+                  id="custom-tabs-three-tab"
+                  role="tablist"
+                >
+                  <li class="nav-item">
+                    <a
+                      class="nav-link active"
+                      id="custom-tabs-three-home-tab"
+                      data-toggle="pill"
+                      href="#custom-tabs-three-home"
+                      role="tab"
+                      aria-controls="custom-tabs-three-home"
+                      aria-selected="true"
+                      >THÔNG TIN CHUNG</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      class="nav-link"
+                      id="custom-tabs-three-profile-tab"
+                      data-toggle="pill"
+                      href="#custom-tabs-three-profile"
+                      role="tab"
+                      aria-controls="custom-tabs-three-profile"
+                      aria-selected="false"
+                      >MB AUTO</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      class="nav-link"
+                      id="custom-tabs-three-profile-tab"
+                      data-toggle="pill"
+                      href="#tab3"
+                      role="tab"
+                      aria-controls="custom-tabs-three-profile"
+                      aria-selected="false"
+                      >MOMO AUTO</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      class="nav-link"
+                      id="custom-tabs-three-profile-tab"
+                      data-toggle="pill"
+                      href="#tab6"
+                      role="tab"
+                      aria-controls="custom-tabs-three-profile"
+                      aria-selected="false"
+                      >API HACKLIKE17</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <div class="tab-content" id="custom-tabs-three-tabContent">
+                  <div
+                    class="tab-pane fade show active"
+                    id="custom-tabs-three-home"
+                    role="tabpanel"
+                    aria-labelledby="custom-tabs-three-home-tab"
+                  >
+                    <form action="" method="POST">
+                      <div class="row">
+                        <div class="col-lg-6">
+                          <div class="form-group">
+                            <label for="exampleInputEmail1">Title</label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="title"
+                              value="<%= listSetting.title %>"
+                              placeholder="VD: shopcode.biz"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-lg-6">
+                          <div class="form-group">
+                            <label for="exampleInputEmail1">Description</label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="description"
+                              value="<%= listSetting.description %>"
+                              placeholder="VD: Hệ thống bán mã nguồn website MMO uy tín"
+                            />
+                          </div>
+                        </div>
+                        <div class="col-lg-6">
+                          <div class="form-group">
+                            <label>Keywords</label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="keywords"
+                              value="<%= listSetting.keywords %>"
+                              placeholder="VD: huydev.."
+                            />
+                          </div>
+                        </div>
+                        <div class="col-lg-6">
+                          <div class="form-group">
+                            <label for="exampleInputEmail1">Author</label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="author"
+                              value="<%= listSetting.author %>"
+                              placeholder="VD: Le Quoc Huy"
+                            />
+                          </div>
+                        </div>            
+                      </div>
+                      <button
+                        name="SaveSettings"
+                        class="btn btn-info btn-icon-left m-b-10"
+                        type="submit"
+                      >
+                        <i class="fas fa-save mr-1"></i>Lưu Ngay
+                      </button>
+                    </form>
+                  </div>
+                  <div
+                    class="tab-pane fade"
+                    id="custom-tabs-three-profile"
+                    role="tabpanel"
+                    aria-labelledby="custom-tabs-three-profile-tab"
+                  >
+                    <form action="" method="POST">
+                      <div class="form-group">
+                        <label for="exampleInputEmail1"
+                          >Nội Dung Nạp (<a
+                            type="button"
+                            data-toggle="modal"
+                            data-target="#modal-hd-auto-bank"
+                            href="#"
+                            >Xem hướng dẫn</a
+                          >)</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="noidungnap"
+                          value="<%= listSetting.noidungnap %>"
+                          placeholder="Nhập token ngân hàng"
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputEmail1"
+                          >Token Bank (<a
+                            type="button"
+                            data-toggle="modal"
+                            data-target="#modal-hd-auto-bank"
+                            href="#"
+                            >Xem hướng dẫn</a
+                          >)</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="token_bank"
+                          value="<%= listSetting.token_mbbank %>"
+                          placeholder="Nhập token ngân hàng"
+                        />
+                      </div>
+                      <button
+                        name="SaveSettings"
+                        class="btn btn-info btn-icon-left btn-block m-b-10"
+                        type="submit"
+                      >
+                        <i class="fas fa-save mr-1"></i>Lưu Ngay
+                      </button>
+                    </form>
+                  </div>
+                  <div
+                    class="tab-pane fade"
+                    id="tab3"
+                    role="tabpanel"
+                    aria-labelledby="tab3"
+                  >
+                    <form action="" method="POST">
+                    
+                      <div class="form-group">
+                        <label for="exampleInputEmail1"
+                          >Token MOMO (<a
+                            type="button"
+                            data-toggle="modal"
+                            data-target="#modal-hd-auto-momo"
+                            href="#"
+                            >Xem hướng dẫn</a
+                          >)</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="token_momo"
+                          value="<%= listSetting.token_momo %>"
+                          placeholder="Nhập token ví momo"
+                        />
+                      </div>
+                      <button
+                        name="SaveSettings"
+                        class="btn btn-info btn-icon-left m-b-10"
+                        type="submit"
+                      >
+                        <i class="fas fa-save mr-1"></i>Lưu Ngay
+                      </button>
+                    </form>
+                  </div>
+               
+
+                  <div
+                    class="tab-pane fade"
+                    id="tab6"
+                    role="tabpanel"
+                    aria-labelledby="tab6"
+                  >
+                    <form action="" method="POST">
+                      <div class="form-group">
+                        <label for="exampleInputEmail1">Token Hacklike17</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="tk_tds"
+                          name="tk_tds"
+                          value="<%= listSetting.token_hacklike17 %>"
+                          placeholder="Token Hacklike17"
+                        />
+                      </div>
+                      <button
+                        id="huyit"
+                        class="btn btn-info btn-icon-left m-b-10"
+                        type="submit"
+                      >
+                        <i class="fas fa-save mr-1"></i>Lưu Ngay
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="col-lg-12 connectedSortable">
+            <form action="" method="POST">
+              <div class="card card-primary card-outline">
+                <div class="card-header">
+                  <h3 class="card-title">
+                    <i class="fas fa-cogs mr-1"></i>
+                    CẤU HÌNH NỘI DUNG
+                  </h3>
+                  <div class="card-tools">
+                    <button
+                      type="button"
+                      class="btn bg-success btn-sm"
+                      data-card-widget="collapse"
+                    >
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="btn bg-warning btn-sm"
+                      data-card-widget="maximize"
+                    >
+                      <i class="fas fa-expand"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="btn bg-danger btn-sm"
+                      data-card-widget="remove"
+                    >
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1"
+                      >Thông báo toàn hệ thống</label
+                    >
+                    <textarea
+                      name="noidung"
+                      placeholder="Nhập Mô tả"
+                      class="textarea"
+                      required=""
+                    ></textarea>
+                  </div>
+                </div>
+                <div class="card-footer clearfix">
+                  <button
+                    name="SaveSettings"
+                    class="btn btn-info btn-icon-left m-b-10"
+                    type="submit"
+                  >
+                    <i class="fas fa-save mr-1"></i>Lưu Ngay
+                  </button>
+                </div>
+              </div>
+            </form>
+          </section>
+        </div>
+      </div>
+      <!-- /.card-body -->
+      <div class="card-footer clearfix">VUI LÒNG THAO TÁC CẨN THẬN</div>
+    </div>
+    <!-- /.card -->
+  </div>
+  <!-- /.col -->
+</div>
+
+<script>
+  $(function () {
+    $("#datatable1").DataTable();
+  });
+</script>
+<%- include('_layout/footer.ejs') %>

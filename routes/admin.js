@@ -1,0 +1,72 @@
+const express = require("express");
+const User = require("../models/user");
+let router = express.Router();
+const indexController = require("../controllers/admin/index");
+const categoryController = require("../controllers/admin/category");
+const productController = require("../controllers/admin/product");
+
+// phân quyền
+async function requireAdmin(req, res, next) {
+  const sessionEmail = req.session.email;
+  const token = req.body.token;
+  if (sessionEmail) {
+    try {
+      const user = await User.findOne({ email: sessionEmail });
+      if (!user) {
+        return res.status(200).json({
+          status: false,
+          message: "Tài khoản không tồn tại",
+        });
+      }
+      if (user.level === "admin") {
+        next();
+      } else {
+        res.status(403).send("Liên Hệ 0999999999");
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Internal server error");
+    }
+  } else if (token) {
+    try {
+      const user = await User.findOne({ token: token });
+      if (!user) {
+        return res.status(200).json({
+          status: false,
+          message: "Tài khoản không tồn tại",
+        });
+      }
+      if (user.level === "admin") {
+        next();
+      } else {
+        res.status(403).send("Liên Hệ 0999999999");
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Internal server error");
+    }
+  } else {
+    res.status(401).send("Định Hack À Con Chó Này");
+  }
+}
+// index
+router.get("/", requireAdmin, indexController.getAdmin);
+// ====================== category  ====================== //
+router.get("/category", requireAdmin, categoryController.listCategory);
+router.post("/addCategory", requireAdmin, categoryController.addCategory);
+router.post(
+  "/updateCategory/:cateId",
+  requireAdmin,
+  categoryController.updateCategory
+);
+router.post("/deleteCategory/:cateId", categoryController.deleteCategory);
+// ====================== product  ====================== //
+router.get("/product", requireAdmin, productController.listProduct);
+router.post("/addProduct", requireAdmin, productController.addProduct);
+router.post(
+  "/updateProduct/:productId",
+  requireAdmin,
+  productController.updateProduct
+);
+router.post("/deleteProduct/:productId", productController.deleteProduct);
+module.exports = router;
