@@ -19,7 +19,6 @@ router.get("/cart", indexController.viewCart);
 router.post("/updateCart", indexController.updateCart);
 router.post("/deleteCart", indexController.deleteCart);
 
-
 router.get("/register", (req, res, next) => {
   res.render("auth/register");
 });
@@ -39,8 +38,7 @@ router.get("/logout", (req, res) => {
   });
 });
 
-
-router.get("/checkout", (req, res, next) => {
+router.get("/checkout", checkLoggedIn, (req, res, next) => {
   res.render("checkout");
 });
 

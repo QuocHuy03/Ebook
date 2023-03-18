@@ -46,13 +46,46 @@
                 <tbody>
                   <!-- Product Row -->
                   <% if (products.length === 0) { %>
-                    <p>Your cart is empty.</p>
+                    <tr>
+                      <td colspan="8" class="actions">
+                        <p class="text-center text-danger font-weight-bold">Your cart is empty.</p>
+                      </td>
+                    </tr>
                   <% } else { %>
                       <% products.forEach((product) => { %>
                         <tr>
                             <td class="pro-remove">
-                                <input type="hidden" id="deleteProduct" value="<%= product.item._id %>">
-                              <button id="deleteCart" type="submit"><i class="far fa-trash-alt"></i></button>
+                                <input type="hidden" id="deleteProduct_<%= product.item._id %>" value="<%= product.item._id %>">
+                              <button id="deleteCart_<%= product.item._id %>" type="submit"><i class="far fa-trash-alt"></i></button>
+                              <script>
+                                $("#deleteCart_<%= product.item._id %>").on("click",function() {
+                                    $.ajax({
+                                    type: "POST",   
+                                    url: "/deleteCart",
+                                    dataType: 'JSON',
+                                    data: {
+                                        type: "deleteCart",
+                                        deleteIDProduct: $("#deleteProduct_<%= product.item._id %>").val(),
+                                    },
+                                    success: function(res) {
+                                        Swal.fire({
+                                                icon: res.status === true ? "success" : "error",
+                                                title: 'Thông Báo',
+                                                text: res.message
+                                                }).then((result) => {
+                                                if (res.status === true) {
+                                                    window.location.href = "/cart";
+                                                } else {
+                                                    
+                                                }
+                                            });
+                                    },
+                                    error: function(error) {
+                                        console.log(error);
+                                    }
+                                });
+                            })
+                            </script>
                             </td>
                             <td class="pro-thumbnail">
                               <a href="#"
@@ -98,7 +131,13 @@
                                             icon: res.status === true ? "success" : "error",
                                             title: 'Thông Báo',
                                             text: res.message
-                                            });
+                                            }).then((result) => {
+                                          if (res.status === true) {
+                                              window.location.href = "/cart";
+                                          } else {
+                                              
+                                          }
+                                      });
                                 },
                                 error: function(error) {
                                     console.log(error);
@@ -109,11 +148,7 @@
                       <% }); %>
                   <% } %>
                   <!-- Discount Row  -->
-                  <tr>
-                    <td colspan="8" class="actions">
-                      <p>Cảm Ơn</p>
-                    </td>
-                  </tr>
+                 
                 </tbody>
               </table>
             </div>
@@ -145,28 +180,6 @@
     </div>
   </div>
 </main>
-<script>
-    $("#deleteCart").on("click",function() {
-        $.ajax({
-        type: "POST",   
-        url: "/deleteCart",
-        dataType: 'JSON',
-        data: {
-            type: "deleteCart",
-            deleteIDProduct: $("#deleteProduct").val(),
-        },
-        success: function(res) {
-            Swal.fire({
-                    icon: res.status === true ? "success" : "error",
-                    title: 'Thông Báo',
-                    text: res.message
-                    });
-        },
-        error: function(error) {
-            console.log(error);
-        }
-    });
-})
-</script>
+
 <!-- Cart Page End -->
 <%- include('layout/footer.ejs') %>

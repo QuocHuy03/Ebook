@@ -100,6 +100,24 @@ exports.addToCart = (req, res) => {
     });
 };
 
+// exports.viewCart = (req, res) => {
+//   const cart = req.session.cart;
+//   if (!cart) {
+//     return res.render("cart", { products: [], totalPrice: 0 });
+//   }
+
+//   const products = [];
+//   for (const key in cart.huydev) {
+//     products.push(cart.huydev[key]);
+//   }
+//   console.log(products);
+
+//   return res.render("cart", {
+//     products: products,
+//     totalPrice: cart.totalPrice,
+//   });
+// };
+
 exports.viewCart = (req, res) => {
   const cart = req.session.cart;
   if (!cart) {
@@ -110,8 +128,9 @@ exports.viewCart = (req, res) => {
   for (const key in cart.huydev) {
     products.push(cart.huydev[key]);
   }
-  console.log(products);
 
+  res.locals.products = products;
+  console.log(products);
   return res.render("cart", {
     products: products,
     totalPrice: cart.totalPrice,
@@ -135,7 +154,7 @@ exports.updateCart = (req, res) => {
     let totalQuantity = 0;
     let totalPrice = 0;
 
-    // Lặp qua từng sản phẩm và cập nhật nếu tìm thấy sản phẩm có id trùng với id được truyền vào
+    // tìm thấy sản phẩm có id trùng với id được truyền vào
     for (let itemId of cartItems) {
       const productToUpdate = carts.huydev[itemId];
       if (itemId == idProduct) {
@@ -150,7 +169,7 @@ exports.updateCart = (req, res) => {
       }
     }
 
-    // Update Tiền quantity
+    // Update Money Quantity
     carts.totalQuantity = totalQuantity;
     carts.totalPrice = totalPrice;
 

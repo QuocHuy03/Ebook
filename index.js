@@ -22,13 +22,6 @@ app.use(morgan("combined"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// session
-app.use((req, res, next) => {
-  // truyền biến locals email vào các view
-  res.locals.email = req.session.email || null; // nếu session chưa có email, thì để giá trị mặc định là null
-  next();
-});
-
 // views
 
 app.set("view engine", "ejs");
@@ -36,6 +29,24 @@ app.set("views", "./views");
 app.use(express.static("public"));
 // Thêm middleware để cấu hình CORS
 app.use(cors());
+
+app.use(function (req, res, next) {
+  res.locals.loggedin = req.session.loggedin;
+  res.locals.email = req.session.email;
+  next();
+});
+
+app.use(function (req, res, next) {
+  const cart = req.session.cart;
+  const huyitem = [];
+  if (cart) {
+    for (const key in cart.huydev) {
+      huyitem.push(cart.huydev[key]);
+    }
+  }
+  res.locals.huyitem = huyitem;
+  next();
+});
 
 // routes
 
@@ -46,12 +57,6 @@ app.use("/admin", adminRoutes);
 
 app.use((req, res) => {
   return res.render("404.ejs");
-});
-
-app.use(function (req, res, next) {
-  res.locals.loggedin = req.session.loggedin;
-  res.locals.email = req.session.email;
-  next();
 });
 
 // connect

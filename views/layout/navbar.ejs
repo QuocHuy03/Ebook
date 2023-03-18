@@ -1,3 +1,10 @@
+<% function formatNumber(num) { 
+      if (num == null) {
+        return "0"; 
+    } 
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"); 
+    } 
+%>
 <div class="site-header header-2 mb--20 d-none d-lg-block">
   <div class="header-middle pt--10 pb--10">
     <div class="container">
@@ -35,34 +42,48 @@
 
               <div class="cart-block">
                 <div class="cart-total">
-                  <span class="text-number"> 1 </span>
+                  <span class="text-number">
+                     <% if(locals.huyitem.length > 0) { %>
+                          <%= locals.huyitem.length %>
+                      <% } else { %>
+                        0
+                      <% } %>
+                   </span>
                   <span class="text-item"> Shopping Cart </span>
                   <span class="price">
-                    1.000.000
+                    <% if(locals.huyitem.length > 0) { %>
+                      <%= formatNumber(locals.totalPrice) %>
+                    <% } else { %>
+                      0
+                    <% } %>
                     <i class="fas fa-chevron-down"></i>
                   </span>
                 </div>
                 <div class="cart-dropdown-block">
                   <div class="single-cart-block">
+                    <% if (typeof locals !== 'undefined' && locals.huyitem && locals.huyitem.length > 0) { %> 
+                      <% locals.huyitem.forEach(function(product) { %>
                     <div class="cart-product">
                       <a href="#" class="image">
                         <img
-                          src="https://htmldemo.net/pustok/pustok/image/products/cart-product-1.jpg"
-                          alt=""
+                          src="<%= product.item.image %>"
+                          alt="<%= product.item.title %>"
                         />
                       </a>
                       <div class="content">
                         <h3 class="title">
-                          <a href="#">Kodak PIXPRO Astro Zoom AZ421 16 MP</a>
+                          <a href="#"><%= product.item.title %></a>
                         </h3>
                         <p class="price">
-                          <span class="qty">1 ×</span> 1.000.000
+                          <span class="qty"><%= product.quantity %> ×</span> <%=
+                          formatNumber(product.item.price) %>
                         </p>
-                        <button class="cross-btn">
-                          <i class="fas fa-times"></i>
-                        </button>
                       </div>
                     </div>
+                    <% }); %> 
+                    <% } else { %>
+                      <p class="text-center text-danger font-weight-bold">Your cart is empty.</p>
+                    <% } %>
                   </div>
                   <div class="single-cart-block">
                     <div class="btn-block">

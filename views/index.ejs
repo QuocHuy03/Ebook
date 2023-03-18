@@ -1,10 +1,12 @@
-<%- include('layout/header.ejs') %> <%- include('layout/navbar.ejs') %> 
+<%- include('layout/header.ejs') %>
+ <%- include('layout/navbar.ejs') %>
 <% function formatNumber(num) {
    if (num == null) {
      return "0"; 
     } 
-    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"); } 
-    %>
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"); 
+  } 
+%>
 <section class="hero-area hero-slider-2">
   <div class="container">
     <div class="row align-items-lg-center">
@@ -381,6 +383,7 @@
 <% products.forEach((product) => { %>
 <div
   class="modal fade modal-quick-view"
+  
   id="<%= product.slugProduct %>"
   tabindex="-1"
   role="dialog"
@@ -440,15 +443,19 @@
                   <span class="widget-label">Quantity</span>
                   <input
                     type="number"
+                    id="quantity_<%= product.slugProduct %>"
                     class="form-control text-center"
                     value="1"
                   />
                 </div>
                 <div class="add-cart-btn">
-                  <a href="" class="btn btn-outlined--primary"
-                    ><span class="plus-icon">+</span>Add to Cart</a
-                  >
-                </div>
+                  <button type="submit" id="addToCart_<%= product.slugProduct %>"
+                    class="btn btn-outlined--primary"
+                    data-bs-dismiss="modal">
+              <span class="plus-icon">+</span>Add to Cart
+            </button>
+            
+              </div>
               </div>
               <div class="compare-wishlist-row">
                 <a href="" class="add-link"
@@ -480,4 +487,39 @@
     </div>
   </div>
 </div>
-<% }); %> <%- include('layout/footer.ejs') %>
+<script>
+  $("#addToCart_<%= product.slugProduct %>").on("click",function() {
+    console.log("đã vô");
+      $.ajax({
+      type: "POST",   
+      url: "/addToCart",
+      dataType: 'JSON',
+      data: {
+          type: "addToCart",
+          quantity: $("#quantity_<%= product.slugProduct %>").val(),
+          slugProduct: "<%= product.slugProduct %>"
+      },
+      success: function(res) {
+          Swal.fire({
+                  icon: res.status === true ? "success" : "error",
+                  title: 'Thông Báo',
+                  text: res.message
+                  }).then((result) => {
+                  if (res.status === true) {
+                      window.location.href = '/cart';
+                  } else {
+                    
+                  }
+              });
+      },
+      error: function(error) {
+          console.log(error);
+      }
+  });
+})
+</script>
+
+<% }); %> 
+
+
+<%- include('layout/footer.ejs') %>

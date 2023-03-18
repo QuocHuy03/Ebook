@@ -1,11 +1,11 @@
 
-<%- include('layout/header.ejs') %> <%- include('layout/navbar.ejs') %> 
+<%- include('layout/header.ejs') %> <%- include('layout/navbar.ejs') %>
 <% function formatNumber(num) {
-   if (num == null) {
-     return "0"; 
-    } 
-    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"); } 
-    %>
+    if (num == null) {
+      return "0"; 
+     } 
+     return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"); } 
+     %>
 <section class="breadcrumb-section">
     <h2 class="sr-only">Site Breadcrumb</h2>
     <div class="container">
