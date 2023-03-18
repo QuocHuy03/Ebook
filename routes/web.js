@@ -18,6 +18,10 @@ router.post("/addToCart", indexController.addToCart);
 router.get("/cart", indexController.viewCart);
 router.post("/updateCart", indexController.updateCart);
 router.post("/deleteCart", indexController.deleteCart);
+router.get("/checkout", checkLoggedIn, indexController.getviewCheckOut);
+router.post("/orderCart", indexController.orderCart);
+
+router.get("/listOrder", checkLoggedIn, indexController.getListOrder);
 
 router.get("/register", (req, res, next) => {
   res.render("auth/register");
@@ -38,8 +42,5 @@ router.get("/logout", (req, res) => {
   });
 });
 
-router.get("/checkout", checkLoggedIn, (req, res, next) => {
-  res.render("checkout");
-});
 
 module.exports = router;

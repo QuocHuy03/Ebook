@@ -1,5 +1,8 @@
+const random = require("random-token");
 const Product = require("../models/product");
 const Comment = require("../models/comment");
+const Order = require("../models/order");
+const User = require("../models/user");
 
 exports.getIndex = (req, res) => {
   Product.find({})
@@ -22,6 +25,8 @@ exports.getDetail = async (req, res) => {
     console.log(error);
   }
 };
+
+// post comment
 
 exports.postComment = (req, res) => {
   if (!req.session.loggedin) {
@@ -99,24 +104,6 @@ exports.addToCart = (req, res) => {
       });
     });
 };
-
-// exports.viewCart = (req, res) => {
-//   const cart = req.session.cart;
-//   if (!cart) {
-//     return res.render("cart", { products: [], totalPrice: 0 });
-//   }
-
-//   const products = [];
-//   for (const key in cart.huydev) {
-//     products.push(cart.huydev[key]);
-//   }
-//   console.log(products);
-
-//   return res.render("cart", {
-//     products: products,
-//     totalPrice: cart.totalPrice,
-//   });
-// };
 
 exports.viewCart = (req, res) => {
   const cart = req.session.cart;
@@ -212,4 +199,105 @@ exports.deleteCart = (req, res) => {
       message: `Xóa Sản Phẩm Thất Bại`,
     });
   }
+};
+
+// show view session cart
+
+exports.getviewCheckOut = (req, res) => {
+  const cart = req.session.cart;
+  const email = req.session.email;
+
+  if (!cart) {
+    return res.render("checkout", {
+      products: [],
+      totalPrice: 0,
+      userOrder: {},
+    });
+  }
+
+  User.findOne({ email: email })
+    .then((user) => {
+      const userOrder = {
+        fullname: user.fullname,
+        email: user.email,
+      };
+
+      const products = [];
+      if (cart && cart.huydev && Object.keys(cart.huydev).length !== 0) {
+        for (const key in cart.huydev) {
+          products.push(cart.huydev[key]);
+        }
+      }
+
+      res.render("checkout", {
+        products: products,
+        totalPrice: cart.totalPrice || 0,
+        userOrder: userOrder,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+// odder
+exports.orderCart = async (req, res) => {
+  const { email, cart } = req.session;
+
+  if (
+    req.body.address == "" ||
+    req.body.phone == "" ||
+    req.body.comment == ""
+  ) {
+    return res.status(200).json({
+      status: false,
+      message: `Không Được Để Trống`,
+    });
+  } else {
+    try {
+      const productsList = Object.values(cart.huydev); // lấy ra giá trị các sản phẩm
+      console.log("Sản Phẩm Item Order :", productsList);
+
+      const orderData = new Order({
+        emailOrder: email,
+        codeOrder: random(5).toUpperCase(),
+        products: productsList,
+        address: req.body.address, // lấy địa chỉ từ form submit
+        phone: req.body.phone, // lấy số điện thoại từ form submit
+        comment: req.body.comment,
+      });
+
+      await orderData.save(); // lưu đơn hàng vào CSDL
+      req.session.cart = null; // xóa session giỏ hàng sau khi đặt hàng thành công
+      return res.status(200).json({
+        status: true,
+        message: `Đặt Hàng Với Email [${email}] Thành Công`,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(200).json({
+        status: false,
+        message: `Đã có lỗi xảy ra trong quá trình đặt hàng.`,
+      });
+    }
+  }
+};
+
+// list order
+exports.getListOrder = (req, res) => {
+  const email = req.session.email;
+  Order.findOne({ email: email })
+    .then((user) => {
+      const userOrder = {
+        fullname: user.fullname,
+        email: user.email,
+      };
+
+      res.render("listOrder", {
+        userOrder: userOrder,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
