@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/auth");
 const indexController = require("../controllers/index");
+const Category = require("../models/category");
 
 // check login
 function checkLoggedIn(req, res, next) {
@@ -22,14 +23,22 @@ router.get("/checkout", checkLoggedIn, indexController.getviewCheckOut);
 router.post("/orderCart", indexController.orderCart);
 
 router.get("/listOrder", checkLoggedIn, indexController.getListOrder);
-router.get("/detailOrder/:codeOrder", checkLoggedIn, indexController.getDetailOrder);
+router.get(
+  "/detailOrder/:codeOrder",
+  checkLoggedIn,
+  indexController.getDetailOrder
+);
 
-router.get("/register", (req, res, next) => {
-  res.render("auth/register");
+router.get("/categories/:slug", indexController.getProductOfCategory);
+
+router.get("/register", async (req, res, next) => {
+  const categories = await Category.find({});
+  res.render("auth/register", { categories: categories });
 });
 
-router.get("/login", (req, res, next) => {
-  res.render("auth/login");
+router.get("/login", async (req, res, next) => {
+  const categories = await Category.find({});
+  res.render("auth/login", { categories: categories });
 });
 router.post("/postCreateUser", userController.createUser);
 router.post("/postLoginUser", userController.loginUser);
@@ -42,8 +51,5 @@ router.get("/logout", (req, res) => {
     }
   });
 });
-
-
-
 
 module.exports = router;

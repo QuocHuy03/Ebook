@@ -19,20 +19,19 @@
             <thead>
               <tr class="text-center">
                 <th style="width: 5px">STT</th>
-                <th>Tên Đăng Nhập</th>
-                <th>Địa Chỉ Email</th>
-                <th>Vai Trò</th>
-                <th>Số Dư</th>
-                <th>Ngày Tham Gia</th>
-                <th>Thao Tác</th>
+                <th>FULL NAME</th>
+                <th>EMAIL</th>
+                <th>VAI TRÒ</th>
+                <th>NGÀY THAM GIA</th>
+                <th>THAO TÁC</th>
               </tr>
             </thead>
             <tbody>
               <% for(var i=0; i < listUsers.length; i++) { %>
               <tr>
-                <td class="text-center"><%= listUsers[i].id  %></td>
+                <td class="text-center"><%= i + 1  %></td>
                 <td class="text-center" style="text-transform: lowercase">
-                  <%= listUsers[i].username %>
+                  <%= listUsers[i].fullname %>
                 </td>
                 <td class="text-center" style="text-transform: lowercase">
                   <%= listUsers[i].email %>
@@ -40,12 +39,10 @@
                 <td class="text-center" style="text-transform: lowercase">
                   <%= listUsers[i].level %>
                 </td>
-                <td  class="text-center" style="text-transform: lowercase">
-                  <%= listUsers[i].money %>
-                </td>
                 <td class="text-center" width="200" style="text-transform: lowercase">
-                  <%= listUsers[i].create_date %>
+                  <%= new Date(listUsers[i].createdAt).toLocaleString() %>
                 </td>
+              
               <td class="text-center">
                 <a href="" class="btn btn-info">Edit</a>
                 <a href="" class="btn btn-danger">Edit</a>

@@ -3,24 +3,56 @@ const Product = require("../models/product");
 const Comment = require("../models/comment");
 const Order = require("../models/order");
 const User = require("../models/user");
+const Category = require("../models/category");
 
-exports.getIndex = (req, res) => {
-  Product.find({})
-    .then((huyit) => res.render("index", { products: huyit }))
-    .catch((err) => {
-      console.log(err);
-    });
+exports.getIndex = async (req, res) => {
+  try {
+    const categories = await Category.find({});
+    const products = await Product.find({});
+    res.render("index", { products: products, categories: categories });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 exports.getDetail = async (req, res) => {
   try {
     const slug = req.params.slug;
     const product = await Product.findOne({ slugProduct: slug });
+    const categories = await Category.find({});
     const comments = await Comment.find({
       slugProduct: slug, // Bình luận theo slug của sản phẩm
     });
     console.log("Comments : ", comments);
-    res.render("detail", { detailProducts: product, comments: comments });
+
+    res.render("detail", {
+      detailProducts: product,
+      comments: comments,
+      categories: categories,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// get slug category
+
+exports.getProductOfCategory = async (req, res) => {
+  try {
+    const slugCate = req.params.slug;
+    const productOfCategory = await Product.find({ categoryName: slugCate });
+    const categories = await Category.find({});
+
+    if (!productOfCategory) {
+      // Trường hợp không tìm thấy sản phẩm tương ứng, trả về thông báo hoặc chuyển hướng đến trang 404
+      res.status(404).render("404", { pageTitle: "Không tìm thấy sản phẩm" });
+    } else {
+      // Trường hợp tìm thấy sản phẩm tương ứng, render template categories và truyền các biến
+      res.render("categories", {
+        products: productOfCategory,
+        categories: categories,
+      });
+    }
   } catch (error) {
     console.log(error);
   }
@@ -105,10 +137,17 @@ exports.addToCart = (req, res) => {
     });
 };
 
-exports.viewCart = (req, res) => {
+exports.viewCart = async (req, res) => {
+  const categories = await Category.find({});
+
   const cart = req.session.cart;
+
   if (!cart) {
-    return res.render("cart", { products: [], totalPrice: 0 });
+    return res.render("cart", {
+      products: [],
+      totalPrice: 0,
+      categories: categories,
+    });
   }
 
   const products = [];
@@ -117,8 +156,10 @@ exports.viewCart = (req, res) => {
   }
 
   res.locals.products = products;
+  res.locals.totalPrice = cart.totalPrice;
   console.log(products);
   return res.render("cart", {
+    categories: categories,
     products: products,
     totalPrice: cart.totalPrice,
   });
@@ -203,15 +244,18 @@ exports.deleteCart = (req, res) => {
 
 // show view session cart
 
-exports.getviewCheckOut = (req, res) => {
+exports.getviewCheckOut = async (req, res) => {
+  const categories = await Category.find({});
+
   const cart = req.session.cart;
   const email = req.session.email;
 
   if (!cart) {
     return res.render("checkout", {
       products: [],
-      totalPrice: 0,
       userOrder: {},
+      totalPrice: 0,
+      categories: categories,
     });
   }
 
@@ -230,8 +274,9 @@ exports.getviewCheckOut = (req, res) => {
       }
 
       res.render("checkout", {
+        categories: categories,
         products: products,
-        totalPrice: cart.totalPrice || 0,
+        totalPrice: cart.totalPrice,
         userOrder: userOrder,
       });
     })
@@ -286,7 +331,8 @@ exports.orderCart = async (req, res) => {
 };
 
 // list order
-exports.getListOrder = (req, res) => {
+exports.getListOrder = async (req, res) => {
+  const categories = await Category.find({});
   const email = req.session.email;
   Order.find({ emailOrder: email })
     .then((order) => {
@@ -295,7 +341,7 @@ exports.getListOrder = (req, res) => {
       //   console.log("Số lượng:", product.quantity);
       //   console.log("Giá:", product.item.price * product.quantity);
       // });
-      res.render("listOrder", { orders: order });
+      res.render("listOrder", { orders: order, categories: categories });
       console.log(order);
     })
     .catch((err) => {
@@ -303,11 +349,16 @@ exports.getListOrder = (req, res) => {
     });
 };
 
-exports.getDetailOrder = (req, res, next) => {
+exports.getDetailOrder = async (req, res, next) => {
+  const categories = await Category.find({});
+
   const codeOrder = req.params.codeOrder;
   Order.findOne({ codeOrder: codeOrder })
     .then((huydev) => {
-      res.render("listDetailOrder", { detailOrders: huydev });
+      res.render("listDetailOrder", {
+        detailOrders: huydev,
+        categories: categories,
+      });
       console.log(huydev);
     })
     .catch((err) => {

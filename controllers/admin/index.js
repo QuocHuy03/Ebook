@@ -30,6 +30,17 @@ exports.getAdmin = async (req, res) => {
     totalOrder: formatNumber(totalOrder),
   });
 };
+// list Users
+
+exports.getListUser = (req, res) => {
+  Users.find({})
+    .then((users) => {
+      res.render("admin/ListUsers", { listUsers: users });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 // list order
 exports.getListOrder = (req, res) => {

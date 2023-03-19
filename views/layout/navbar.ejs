@@ -114,7 +114,9 @@
                 ><i class="fa fa-bars"></i>Categories</a
               >
               <ul class="category-menu">
-                <li class="cat-item"><a href="#">Education</a></li>
+                <% categories.forEach(function(category) { %>
+                <li class="cat-item"><a href="/categories/<%= category.categorySlug %>"><%= category.categoryName %></a></li>
+                <% }); %>
               </ul>
             </div>
           </nav>

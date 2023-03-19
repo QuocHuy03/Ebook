@@ -1,4 +1,4 @@
-<%- include('layout/header.ejs') %> <%- include('layout/navbar.ejs') %>
+<%- include('layout/header.ejs') %>  <%- include('layout/navbar.ejs', {categories: categories}) %>
 <% function formatNumber(num) {
     if (num == null) {
       return "0"; 

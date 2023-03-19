@@ -74,5 +74,6 @@ router.post("/deleteProduct/:productId", productController.deleteProduct);
 
 router.get("/listOrder", requireAdmin, indexController.getListOrder);
 router.get("/detailOrder/:codeOrder", requireAdmin, indexController.getDetailOrder);
+router.get("/ListUsers", requireAdmin, indexController.getListUser);
 
 module.exports = router;
