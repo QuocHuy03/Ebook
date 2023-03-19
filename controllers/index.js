@@ -262,12 +262,14 @@ exports.orderCart = async (req, res) => {
         emailOrder: email,
         codeOrder: random(5).toUpperCase(),
         products: productsList,
-        address: req.body.address, // lấy địa chỉ từ form submit
-        phone: req.body.phone, // lấy số điện thoại từ form submit
+        totalPrice: cart.totalPrice || 0,
+        status: "Processed",
+        address: req.body.address,
+        phone: req.body.phone,
         comment: req.body.comment,
       });
 
-      await orderData.save(); // lưu đơn hàng vào CSDL
+      await orderData.save(); // lưu
       req.session.cart = null; // xóa session giỏ hàng sau khi đặt hàng thành công
       return res.status(200).json({
         status: true,
@@ -286,16 +288,27 @@ exports.orderCart = async (req, res) => {
 // list order
 exports.getListOrder = (req, res) => {
   const email = req.session.email;
-  Order.findOne({ email: email })
-    .then((user) => {
-      const userOrder = {
-        fullname: user.fullname,
-        email: user.email,
-      };
+  Order.find({ emailOrder: email })
+    .then((order) => {
+      // order.products.forEach((product) => {
+      //   console.log("Tên sản phẩm:", product.item.title);
+      //   console.log("Số lượng:", product.quantity);
+      //   console.log("Giá:", product.item.price * product.quantity);
+      // });
+      res.render("listOrder", { orders: order });
+      console.log(order);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
-      res.render("listOrder", {
-        userOrder: userOrder,
-      });
+exports.getDetailOrder = (req, res, next) => {
+  const codeOrder = req.params.codeOrder;
+  Order.findOne({ codeOrder: codeOrder })
+    .then((huydev) => {
+      res.render("listDetailOrder", { detailOrders: huydev });
+      console.log(huydev);
     })
     .catch((err) => {
       console.log(err);

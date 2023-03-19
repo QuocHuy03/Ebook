@@ -1,12 +1,30 @@
 const slug = require("url-slug");
 const Product = require("../../models/product");
 const Category = require("../../models/category");
+const Comment = require("../../models/comment");
 
 exports.listProduct = async (req, res, next) => {
   try {
     const categories = await Category.find({});
     const products = await Product.find({});
-    console.log(products);
+    // loop
+    for (let product of products) {
+      const totalComment = await Comment.count({
+        slugProduct: product.slugProduct,
+      });
+      console.log(`Product "${product.title}" has ${totalComment} comments`);
+      product.review_count = totalComment;  // lấy ra rồi update thôi
+      console.log("Tổng Comment :", product.review_count);
+      console.log("Tổng Product :", products.length);
+      // tb
+      const averageComment = totalComment / products.length;
+
+      product.average_score = averageComment.toFixed(1);
+
+      product.save();
+      console.log(`Trung Bình Comment "${product.title}" : ${averageComment}`);
+    }
+    // console.log(products);
     res.render("admin/ListProducts", {
       showCategories: categories,
       showProduct: products,
@@ -57,7 +75,7 @@ exports.addProduct = (req, res, next) => {
       descriptionProduct,
       categoryName,
     });
-    console.log("Product : ", products);
+    // console.log("Product : ", products);
     products
       .save()
       .then((result) => {

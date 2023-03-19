@@ -23,6 +23,14 @@ const orderSchema = new Schema({
       },
     },
   ],
+  totalPrice: {
+    type: Number,
+    required: true,
+  },
+  status: {
+    type: String,
+    required: true,
+  },
   address: {
     type: String,
     required: true,

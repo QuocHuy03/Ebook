@@ -22,6 +22,7 @@ router.get("/checkout", checkLoggedIn, indexController.getviewCheckOut);
 router.post("/orderCart", indexController.orderCart);
 
 router.get("/listOrder", checkLoggedIn, indexController.getListOrder);
+router.get("/detailOrder/:codeOrder", checkLoggedIn, indexController.getDetailOrder);
 
 router.get("/register", (req, res, next) => {
   res.render("auth/register");
@@ -41,6 +42,8 @@ router.get("/logout", (req, res) => {
     }
   });
 });
+
+
 
 
 module.exports = router;

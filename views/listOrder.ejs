@@ -34,59 +34,34 @@
                 <!-- Head Row -->
                 <thead>
                   <tr>
-                    <th class="pro-remove">STT</th>
                     <th class="pro-thumbnail">Mã Đơn Hàng</th>
                     <th class="pro-title">Ngày Đặt</th>
                     <th class="pro-price">Tình Trạng</th>
-                    <th class="pro-quantity">Quantity</th>
+                    <th class="pro-quantity">Tổng Tiền</th>
                     <th class="pro-subtotal">Thao Tác</th>
                   </tr>
                 </thead>
                 <tbody>
                   <!-- Product Row -->
-                  <% if (products.length === 0) { %>
-                    <tr>
-                      <td colspan="8" class="actions">
-                        <p class="text-center text-danger font-weight-bold">Your cart is empty.</p>
-                      </td>
-                    </tr>
-                  <% } else { %>
-                      <% products.forEach((product) => { %>
-                        <tr>
-                            <td class="pro-remove">
-                               1
-                            </td>
-                            <td class="pro-thumbnail">
-                              <a href="#"
-                                ><img
-                                  src="<%= product.item.image %>"
-                                  alt="<%= product.item.title %>"
-                              /></a>
-                            </td>
-                            <td class="pro-title"><a href="#"><%= product.item.title %></a></td>
-                            <td class="pro-price"><span><%= formatNumber(product.item.price) %></span></td>
-                            <td class="pro-quantity">
-                              <div class="pro-qty">
-                                <div class="count-input-block">
-                                    <input type="hidden" id="idProduct_<%= product.item._id %>" value="<%= product.item._id %>">
-                                  <input
-                                    type="number"
-                                    id="quantity_<%= product.item._id %>"
-                                    class="form-control text-center"
-                                    value="<%= product.quantity %>"
-                                  />
-                                </div>
-                              </div>
-                            </td>
-                            <td class="pro-subtotal"><span><%= formatNumber(product.item.price * product.quantity) %></span></td>
-                            <td><button
-                                type="submit"
-                                class="btn btn-outlined"
-                                id="updateCart_<%= product.item._id %>">Update Cart</button></td>
-                          </tr>
-                        
-                      <% }); %>
-                  <% } %>
+                  <% if (orders) { %>
+                    <% orders.forEach((order) => { %>
+                      <tr>
+                        <td><%= order.codeOrder %></td>
+                        <td><%= new Date(order.orderDate).toLocaleString() %></td>
+                        <td><%= order.status %></td>
+                        <td><%= formatNumber(order.totalPrice) %></td>
+                        <td>
+                          <a href="/detailOrder/<%= order.codeOrder %>" class="btn btn-info text-light">Chi Tiết</a>
+                        </td>
+                      </tr>
+                    <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="8" class="actions">
+                                  <p class="text-center text-danger font-weight-bold">No orders found.</p>
+                                </td>
+                              </tr>
+                          <% } %>
                   <!-- Discount Row  -->
                  
                 </tbody>

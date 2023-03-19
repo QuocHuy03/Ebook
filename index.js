@@ -7,6 +7,7 @@ const cors = require("cors");
 const port = 3000;
 const webRoutes = require("./routes/web");
 const adminRoutes = require("./routes/admin");
+const apiRoutes = require("./routes/api");
 const session = require("express-session");
 
 app.use(
@@ -52,11 +53,12 @@ app.use(function (req, res, next) {
 
 app.use("/", webRoutes);
 app.use("/admin", adminRoutes);
+app.use("/api", apiRoutes);
 
 // middleware
 
 app.use((req, res) => {
-  return res.render("404.ejs");
+  return res.render("404");
 });
 
 // connect

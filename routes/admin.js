@@ -46,7 +46,7 @@ async function requireAdmin(req, res, next) {
       res.status(500).send("Internal server error");
     }
   } else {
-    res.status(401).send("Định Hack À Con Chó Này");
+    res.render("404");
   }
 }
 // index
@@ -69,4 +69,10 @@ router.post(
   productController.updateProduct
 );
 router.post("/deleteProduct/:productId", productController.deleteProduct);
+
+// ====================== list orders  ====================== //
+
+router.get("/listOrder", requireAdmin, indexController.getListOrder);
+router.get("/detailOrder/:codeOrder", requireAdmin, indexController.getDetailOrder);
+
 module.exports = router;
