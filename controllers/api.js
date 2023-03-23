@@ -1,4 +1,5 @@
 const Product = require("../models/product");
+const Category = require("../models/category");
 
 exports.apiGetISBN = async (req, res) => {
   try {
@@ -23,4 +24,24 @@ exports.apiGetISBN = async (req, res) => {
     console.log(error);
     res.status(500).json({ status: false, message: "Lỗi hệ thống" });
   }
+};
+
+exports.apiGetProducts = async (req, res) => {
+  const products = await Product.find({});
+
+  res.status(200).json({
+    status: true,
+    message: `Lấy Sản Phẩm Thành Công`,
+    product: products,
+  });
+};
+
+exports.apiGetCategories = async (req, res) => {
+  const categories = await Category.find({});
+
+  res.status(200).json({
+    status: true,
+    message: `Lấy Danh Mục Thành Công`,
+    categories: categories,
+  });
 };

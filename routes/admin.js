@@ -76,4 +76,6 @@ router.get("/listOrder", requireAdmin, indexController.getListOrder);
 router.get("/detailOrder/:codeOrder", requireAdmin, indexController.getDetailOrder);
 router.get("/ListUsers", requireAdmin, indexController.getListUser);
 
+router.get("/updateOrder/:id", requireAdmin, indexController.updateOrder);
+
 module.exports = router;

@@ -48,7 +48,13 @@
                       <tr>
                         <td><%= order.codeOrder %></td>
                         <td><%= new Date(order.orderDate).toLocaleString() %></td>
-                        <td><%= order.status %></td>
+                        <td>
+                          <% if(order.status == 'Delivering') { %>
+                            <a class='btn btn-success text-white' href="/statusOrder/<%= order._id %>">Đã Nhận Hàng</a>
+                          <% } else {  %>
+                              <a href="" class=""><%= order.status %></a>
+                          <% } %>
+                        </td>
                         <td><%= formatNumber(order.totalPrice) %></td>
                         <td>
                           <a href="/detailOrder/<%= order.codeOrder %>" class="btn btn-info text-light">Chi Tiết</a>

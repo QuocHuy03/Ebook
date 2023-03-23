@@ -44,10 +44,8 @@ exports.getProductOfCategory = async (req, res) => {
     const categories = await Category.find({});
 
     if (!productOfCategory) {
-      // Trường hợp không tìm thấy sản phẩm tương ứng, trả về thông báo hoặc chuyển hướng đến trang 404
       res.status(404).render("404", { pageTitle: "Không tìm thấy sản phẩm" });
     } else {
-      // Trường hợp tìm thấy sản phẩm tương ứng, render template categories và truyền các biến
       res.render("categories", {
         products: productOfCategory,
         categories: categories,
@@ -91,6 +89,88 @@ exports.postComment = (req, res) => {
   }
 };
 
+// update comment
+
+exports.updateComment = (req, res, next) => {
+  if (!req.session.loggedin) {
+    return res.status(200).json({
+      status: false,
+      message: "Vui Lòng Đăng Nhập Để Tiếp Tục",
+    });
+  }
+
+  if (req.body.editlistcomment == "") {
+    return res.status(200).json({
+      status: false,
+      message: "Không Được Để Trống",
+    });
+  }
+
+  Comment.findOne({ _id: req.body.idEditComment, email: req.session.email })
+    .then((comment) => {
+      if (null) {
+        return res.status(200).json({
+          status: false,
+          message: "Không Tìm Thấy Bình Luận",
+        });
+      } else {
+        comment.comment = req.body.editlistcomment;
+        return comment.save();
+      }
+    })
+    .then(() => {
+      return res.status(200).json({
+        status: true,
+        message: "Cập Nhật Bình Luận Thành Công",
+      });
+    })
+    .catch((err) => {
+      // console.log(err);
+      return res.status(200).json({
+        status: false,
+        message: "Không Được Edit Bình Luận Của Người Ta!",
+      });
+    });
+};
+
+// delete comment
+
+exports.deleteComment = (req, res) => {
+  if (!req.session.loggedin) {
+    return res.status(200).json({
+      status: false,
+      message: "Vui Lòng Đăng Nhập Để Tiếp Tục",
+    });
+  }
+  // console.log(req.body.idDeleteComment);
+  // console.log(req.session.email);
+  Comment.findOne({ _id: req.body.idDeleteComment, email: req.session.email })
+    .then((comment) => {
+      console.log(comment); // output : null
+      if (null) {
+        return res.status(200).json({
+          status: false,
+          message: "Không Tìm Thấy Bình Luận",
+        });
+      }
+
+      return Comment.deleteOne({ _id: comment._id });
+    })
+    .then(() => {
+      return res.status(200).json({
+        status: true,
+        message: "Xóa Bình Luận Thành Công",
+      });
+    })
+    .catch((err) => {
+      // console.log('cc',err);
+      return res.status(200).json({
+        status: false,
+        message: "Không Được Xóa Bình Luận Của Người Ta!",
+      });
+    });
+};
+
 // add to cart
 
 exports.addToCart = (req, res) => {
@@ -108,7 +188,7 @@ exports.addToCart = (req, res) => {
       if (!cart) {
         cart = { huydev: {}, totalQuantity: 0, totalPrice: 0 };
       }
-      // +1 và đoạn này khó , đói nhưng vẫn cố gắn fix hic
+      // +1 và đoạn này khó
       if (cart.huydev[product._id]) {
         cart.huydev[product._id].quantity += quantity;
         cart.totalQuantity += quantity;
@@ -178,11 +258,10 @@ exports.updateCart = (req, res) => {
     console.log(Object.keys(carts.huydev));
     const cartItems = Object.keys(carts.huydev);
 
-    // Khởi tạo số lượng tổng giá trị sản phẩm trong giỏ hàng
     let totalQuantity = 0;
     let totalPrice = 0;
 
-    // tìm thấy sản phẩm có id trùng với id được truyền vào
+    // sản phẩm có id trùng với id được truyền vào
     for (let itemId of cartItems) {
       const productToUpdate = carts.huydev[itemId];
       if (itemId == idProduct) {
@@ -363,5 +442,26 @@ exports.getDetailOrder = async (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
+    });
+};
+
+exports.getStatusComplete = (req, res, next) => {
+  const idOrder = req.params.id;
+  Order.findById(idOrder)
+    .then((huyit) => {
+      huyit.status = "Complete";
+      return huyit.save();
+    })
+    .then((result) => {
+      res.status(200).json({
+        status: true,
+        message: "Nhận Hàng Thành Công",
+      });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 };

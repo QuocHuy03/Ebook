@@ -15,6 +15,8 @@ function checkLoggedIn(req, res, next) {
 router.get("/", indexController.getIndex);
 router.get("/detail/:slug", indexController.getDetail);
 router.post("/postComment", indexController.postComment);
+router.post("/updateComment", indexController.updateComment);
+router.post("/deleteComment", indexController.deleteComment);
 router.post("/addToCart", indexController.addToCart);
 router.get("/cart", indexController.viewCart);
 router.post("/updateCart", indexController.updateCart);
@@ -28,6 +30,8 @@ router.get(
   checkLoggedIn,
   indexController.getDetailOrder
 );
+router.get("/statusOrder/:id", checkLoggedIn, indexController.getStatusComplete);
+
 
 router.get("/categories/:slug", indexController.getProductOfCategory);
 

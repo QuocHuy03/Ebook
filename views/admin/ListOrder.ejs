@@ -39,10 +39,17 @@
                   <td><%= index + 1 %></td>
                   <td><%= order.codeOrder %></td>
                   <td><%= order.emailOrder %></td>
-                  <td><%= order.status %></td>
+                  <td style = "font-weight:bold;<% if (order.status === 'Processed') { %>color: red;<% } else if (order.status === 'Delivering') { %>color: #d51ac0;<% } else { %>color: #66CC33;<% } %>"><%= order.status %></td>
+
                   <td><%= formatNumber(order.totalPrice) %></td>
                   <td>
-                    <a href="/detailOrder/<%= order.codeOrder %>" class="btn btn-info text-light">Giao Hàng</a>
+                    <% if(order.status == 'Processed') { %>
+                      <a href="/admin/updateOrder/<%= order._id %>" class="btn btn-danger text-light">Giao Hàng</a>
+                    <% } else if(order.status == 'Complete') {  %>
+                      <button class='btn btn-success' disabled">Khách Hàng Đã Nhận</button>
+                    <% } else { %>
+                      <button class='btn btn-info' disabled">Đợi Phản Hồi</button>
+                    <% } %>
                   </td>
                   <td><a href="/admin/detailOrder/<%= order.codeOrder %>" class="btn btn-info text-light">Chi Tiết</a></td>
                   <td><%= new Date(order.orderDate).toLocaleString() %></td>

@@ -65,3 +65,24 @@ exports.getDetailOrder = (req, res, next) => {
       console.log(err);
     });
 };
+
+exports.updateOrder = (req, res, next) => {
+  const idOrder = req.params.id;
+  Order.findById(idOrder)
+    .then((huyit) => {
+      huyit.status = "Delivering";
+      return huyit.save();
+    })
+    .then((result) => {
+      res.status(200).json({
+        status: true,
+        message: "Giao Hàng Thành Công",
+      });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
