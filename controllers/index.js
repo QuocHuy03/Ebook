@@ -23,7 +23,7 @@ exports.getDetail = async (req, res) => {
     const comments = await Comment.find({
       slugProduct: slug, // Bình luận theo slug của sản phẩm
     });
-    console.log("Comments : ", comments);
+    // console.log("Comments : ", comments);
 
     res.render("detail", {
       detailProducts: product,
@@ -58,7 +58,7 @@ exports.getProductOfCategory = async (req, res) => {
 
 // post comment
 
-exports.postComment = (req, res) => {
+exports.postComment = async (req, res) => {
   if (!req.session.loggedin) {
     return res
       .status(200)
@@ -67,24 +67,37 @@ exports.postComment = (req, res) => {
     if (req.body.star == "" || req.body.message == "") {
       res.status(200).json({ status: false, message: "Không Được Để Trống" });
     } else {
-      const comment = new Comment({
+      const commentLenght = await Comment.count({
         email: req.session.email,
-        rating: req.body.star,
-        comment: req.body.message,
-        slugProduct: req.body.slugProduct,
       });
-      comment
-        .save()
-        .then((result) => {
-          console.log(result);
-          res.json({ status: true, message: "Comment saved successfully" });
-        })
-        .catch((error) => {
-          console.error(error);
-          res
-            .status(500)
-            .json({ status: false, message: "Failed to save comment" });
+      console.log(
+        "Tổng Comment Của Email : ",
+        req.session.email,
+        "Là : ",
+        commentLenght
+      );
+      if (commentLenght >= 5) {
+        res.json({ status: false, message: "Bình Luận Quá 5 Lần !" });
+      } else {
+        const comment = new Comment({
+          email: req.session.email,
+          rating: req.body.star,
+          comment: req.body.message,
+          slugProduct: req.body.slugProduct,
         });
+        comment
+          .save()
+          .then((result) => {
+            // console.log(result);
+            res.json({ status: true, message: "Bình Luận Thành Công" });
+          })
+          .catch((error) => {
+            console.error(error);
+            res
+              .status(500)
+              .json({ status: false, message: "Lỗi Bình Luận Ròi" });
+          });
+      }
     }
   }
 };
