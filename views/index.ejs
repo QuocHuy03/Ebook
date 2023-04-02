@@ -489,7 +489,6 @@
 </div>
 <script>
   $("#addToCart_<%= product.slugProduct %>").on("click",function() {
-    console.log("đã vô");
       $.ajax({
       type: "POST",   
       url: "/addToCart",

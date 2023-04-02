@@ -31,6 +31,8 @@ app.use(express.static("public"));
 // Thêm middleware để cấu hình CORS
 app.use(cors());
 
+
+
 app.use(function (req, res, next) {
   res.locals.loggedin = req.session.loggedin;
   res.locals.email = req.session.email;
