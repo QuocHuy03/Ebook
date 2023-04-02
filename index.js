@@ -4,7 +4,8 @@ const app = express();
 const { default: mongoose } = require("mongoose");
 const morgan = require("morgan");
 const cors = require("cors");
-const port = 1234;
+require("dotenv").config();
+const port = process.env.PORT || 2003;
 const webRoutes = require("./routes/web");
 const adminRoutes = require("./routes/admin");
 const apiRoutes = require("./routes/api");
@@ -66,7 +67,7 @@ app.use((req, res) => {
 // connect
 
 mongoose
-  .connect("mongodb://localhost:27017/ebook")
+  .connect(process.env.MONGODB)
   .then((result) => {
     app.listen(port, () => {
       console.log(`ứng dụng đang chạy với port: ${port}`);
