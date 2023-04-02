@@ -115,8 +115,12 @@
                 <input type="hidden" id="idComment_<%= comment._id %>" value="<%= comment._id %>">
                 <input class="button-ouline" id="editlistcomment_<%= comment._id %>" name="editlistcomment" value="<%= comment.comment %>" />
                 <div class="d-flex gap-2">
-                  <button id="editComment_<%= comment._id %>" type="submit" class=" text-info font-weight-400">Edit</button> |
-                  <button id="deleteComment_<%= comment._id %>" class="text-danger font-weight-400">Delete</button>
+                  <% if (locals.email == comment.email) { %>
+                    <button id="editComment_<%= comment._id %>" type="submit" class=" text-info font-weight-400">Edit</button> |
+                    <button id="deleteComment_<%= comment._id %>" class="text-danger font-weight-400">Delete</button>
+                  <% } else { %>
+
+                    <% } %>
                 </div>
               </div>
 

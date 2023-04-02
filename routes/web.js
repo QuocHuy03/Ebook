@@ -35,6 +35,9 @@ router.get("/statusOrder/:id", checkLoggedIn, indexController.getStatusComplete)
 
 router.get("/categories/:slug", indexController.getProductOfCategory);
 
+
+
+
 router.get("/register", async (req, res, next) => {
   const categories = await Category.find({});
   res.render("auth/register", { categories: categories });

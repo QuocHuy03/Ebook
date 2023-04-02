@@ -42,6 +42,28 @@ exports.getListUser = (req, res) => {
     });
 };
 
+exports.updateUser = (req, res, next) => {
+  let userId = req.params.id;
+  let level = req.body.level;
+  Users.findById(userId)
+    .then((huyit) => {
+      huyit.level = level;
+      return huyit.save();
+    })
+    .then((result) => {
+      res.status(200).json({
+        status: "1",
+        message: "Cập Nhật Thành Viên Thành Công",
+        category: result,
+      });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
 // list order
 exports.getListOrder = (req, res) => {
   Order.find({})

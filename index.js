@@ -5,7 +5,7 @@ const { default: mongoose } = require("mongoose");
 const morgan = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
-const port = process.env.PORT || 2003;
+const port = process.env.PORT || 1234;
 const webRoutes = require("./routes/web");
 const adminRoutes = require("./routes/admin");
 const apiRoutes = require("./routes/api");
