@@ -1,18 +1,29 @@
 const express = require("express");
-var bodyParser = require("body-parser");
-const app = express();
-const { default: mongoose } = require("mongoose");
+const session = require("express-session");
+const RedisStore = require("connect-redis")(session);
+const redis = require("redis");
+const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const cors = require("cors");
+const mongoose = require("mongoose");
 require("dotenv").config();
-const port = process.env.PORT || 1234;
+
 const webRoutes = require("./routes/web");
 const adminRoutes = require("./routes/admin");
 const apiRoutes = require("./routes/api");
-const session = require("express-session");
+
+const app = express();
+const port = process.env.PORT || 1234;
+
+const redisClient = redis.createClient(process.env.REDIS_URL);
+
+redisClient.on("error", function (error) {
+  console.error(error);
+});
 
 app.use(
   session({
+    store: new RedisStore({ client: redisClient }),
     secret: "mysecretkey",
     resave: false,
     saveUninitialized: true,
@@ -29,10 +40,9 @@ app.use(bodyParser.json());
 app.set("view engine", "ejs");
 app.set("views", "./views");
 app.use(express.static("public"));
+
 // Thêm middleware để cấu hình CORS
 app.use(cors());
-
-
 
 app.use(function (req, res, next) {
   res.locals.loggedin = req.session.loggedin;
