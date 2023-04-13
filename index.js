@@ -3,7 +3,7 @@ const session = require("express-session");
 const RedisStore = require("connect-redis")(session);
 const redis = require("redis");
 const bodyParser = require("body-parser");
-const morgan = require("morgan");
+// const morgan = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
@@ -15,15 +15,10 @@ const apiRoutes = require("./routes/api");
 const app = express();
 const port = process.env.PORT || 1234;
 
-const redisClient = redis.createClient(process.env.REDIS_URL);
 
-redisClient.on("error", function (error) {
-  console.error(error);
-});
 
 app.use(
   session({
-    store: new RedisStore({ client: redisClient }),
     secret: "mysecretkey",
     resave: false,
     saveUninitialized: true,
@@ -31,7 +26,7 @@ app.use(
   })
 );
 
-app.use(morgan("combined"));
+// app.use(morgan("combined"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -47,6 +42,7 @@ app.use(cors());
 app.use(function (req, res, next) {
   res.locals.loggedin = req.session.loggedin;
   res.locals.email = req.session.email;
+  res.locals.totalPrice = req.session.totalPrice;
   next();
 });
 

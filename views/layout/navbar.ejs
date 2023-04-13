@@ -51,7 +51,7 @@
                    </span>
                   <span class="text-item"> Shopping Cart </span>
                   <span class="price">
-                    <% if(locals.huyitem.length > 0) { %>
+                    <% if(typeof locals !== 'undefined' && locals.huyitem && locals.huyitem.length > 0) { %>
                       <%= formatNumber(locals.totalPrice) %>
                     <% } else { %>
                       <%= formatNumber(locals.totalPrice) %>

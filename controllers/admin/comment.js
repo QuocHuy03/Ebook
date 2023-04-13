@@ -2,19 +2,24 @@ const slug = require("url-slug");
 const Comment = require("../../models/comment");
 const Product = require("../../models/product");
 
-
 exports.listComment = async (req, res, next) => {
-    try {
-      const comments = await Comment.find({}).lean();
-      const showComment = await Promise.all(comments.map(async (comment) => {
-        const product = await Product.findOne({ slugProduct: comment.slugProduct }).lean();
+  try {
+    const comments = await Comment.find({}).lean();
+    const showComment = await Promise.all(
+      comments.map(async (comment) => {
+        const product = await Product.findOne({
+          slugProduct: comment.slugProduct,
+        }).lean();
+        // console.log(product.title);
         return { ...comment, productName: product.title };
-      }));
-      res.render('admin/ListComment', { showComment });
-    } catch (err) {
-      next(err);
-    }
-  };
+      })
+    );
+    // console.log(showComment);
+    res.render("admin/ListComment", { showComment });
+  } catch (err) {
+    next(err);
+  }
+};
 
 exports.deleteComment = (req, res, next) => {
   const commentID = req.params.cmtId;

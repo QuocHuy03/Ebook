@@ -9,8 +9,8 @@
             &times;
           </button>
           <b
-            >Phiên bản hiện tại:
-            <span style="color: yellow; font-size: 25px">Version 7.4</span></b
+            >
+            <span style="color: yellow; font-size: 25px">Version 1.0</span></b
           >
           <ul>
             <li>01/08/2023: Tuỳ chỉnh ẩn sản phẩm khi hết tài khoản.</li>
@@ -18,17 +18,7 @@
               31/07/2023: Update tuỳ chỉnh giao dịch ảo tại <b>Cài Đặt</b> &
               <b>Giao dịch ảo</b>.
             </li>
-            <li>
-              29/07/2023: Tuỳ chỉnh trạng thái mặc định khi thêm sản phẩm API.
-            </li>
-            <li>
-              23/07/2023: Thêm nút Login user, thống kê lợi nhuận khi đấu API.
-            </li>
-            <li>23/07/2023: Thêm chức năng nạp tiền tự động qua Crypto.</li>
-            <li>
-              21/07/2023: Thêm Tuỳ chọn tự động cập tên sản phẩm API, thêm giá
-              vốn cho đơn hàng API để xem lợi nhuận khi đấu API.
-            </li>
+
             <li>10/07/2023: Cập nhật chức năng kết nối API</li>
           </ul>
           <i
@@ -42,7 +32,7 @@
             <div class="small-box bg-info">
               <div class="inner">
                 <h3><%= totalOrder %></h3>
-                <p>Đơn Hàng Đã Chạy</p>
+                <p>Đơn Hàng</p>
               </div>
               <div class="icon">
                 <i class="ion ion-bag"></i>
@@ -244,13 +234,13 @@
   </div>
 </div>
 <script>
-    $(function () {
-      $("#datatable1").DataTable({
-        responsive: false,
-        autoWidth: false,
-      });
+  $(function () {
+    $("#datatable1").DataTable({
+      responsive: false,
+      autoWidth: false,
     });
-  </script>
+  });
+</script>
 <script>
   $(function () {
     $("#datatable2").DataTable({

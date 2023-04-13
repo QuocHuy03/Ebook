@@ -249,6 +249,7 @@ exports.viewCart = async (req, res) => {
   }
 
   res.locals.products = products;
+  req.session.totalPrice = cart.totalPrice;
   res.locals.totalPrice = cart.totalPrice;
   console.log(products);
   return res.render("cart", {
@@ -268,15 +269,15 @@ exports.updateCart = (req, res) => {
       message: "Không Có Sản Phẩm Nào Ở Đây Huy Nha",
     });
   } else {
-    console.log(Object.keys(carts.huydev));
     const cartItems = Object.keys(carts.huydev);
-
     let totalQuantity = 0;
     let totalPrice = 0;
 
     // sản phẩm có id trùng với id được truyền vào
     for (let itemId of cartItems) {
       const productToUpdate = carts.huydev[itemId];
+      console.log("Item : ", carts.huydev);
+      console.log("Item ID", itemId);
       if (itemId == idProduct) {
         productToUpdate.quantity = quantity;
         totalQuantity += parseInt(quantity);

@@ -1,4 +1,10 @@
 <%- include('_layout/header.ejs') %> <%- include('_layout/nav.ejs') %>
+<% function formatNumber(num) {
+  if (num == null) {
+    return "0"; 
+   } 
+   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"); } 
+   %>
 
 <div class="row mb-2">
   <div class="col-sm-6"></div>
@@ -63,7 +69,7 @@
                   <%= showProduct[i].average_score %>
                 </td>
                 <td class="text-center">
-                  <%= showProduct[i].price %>
+                  <%= formatNumber(showProduct[i].price) %>
                 </td>
                 <td class="text-center">
                   <%= showProduct[i].categoryName %>
