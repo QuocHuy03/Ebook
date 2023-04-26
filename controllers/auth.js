@@ -1,5 +1,4 @@
 const User = require("../models/user");
-const bcrypt = require("bcrypt");
 const random = require("random-token");
 
 // register
