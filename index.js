@@ -14,18 +14,9 @@ const apiRoutes = require("./routes/api");
 const app = express();
 const port = process.env.PORT || 1234;
 
-// Redis client
-const redisClient = redis.createClient({
-  url: process.env.REDIS_URL,
-});
-
-redisClient.on("error", (err) => {
-  console.log("Redis error: ", err);
-});
-
 // Session store
 const sessionStore = new RedisStore({
-  client: redisClient,
+  url: process.env.REDIS_URL,
   ttl: 86400, // 1 day expiration
 });
 
@@ -55,6 +46,9 @@ app.use(function (req, res, next) {
 });
 
 app.use(function (req, res, next) {
+  const redisClient = redis.createClient({
+    url: process.env.REDIS_URL,
+  });
   const cart = req.session.cart;
   const huyitem = [];
   if (cart) {
@@ -63,6 +57,7 @@ app.use(function (req, res, next) {
     }
   }
   res.locals.huyitem = huyitem;
+  redisClient.quit(); // Quit Redis client after use
   next();
 });
 
