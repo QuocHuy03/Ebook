@@ -3,7 +3,6 @@ const session = require("express-session");
 const RedisStore = require("connect-redis")(session);
 const redis = require("redis");
 const bodyParser = require("body-parser");
-// const morgan = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
@@ -15,7 +14,20 @@ const apiRoutes = require("./routes/api");
 const app = express();
 const port = process.env.PORT || 1234;
 
+// Redis client
+const redisClient = redis.createClient({
+  url: process.env.REDIS_URL,
+});
 
+redisClient.on("error", (err) => {
+  console.log("Redis error: ", err);
+});
+
+// Session store
+const sessionStore = new RedisStore({
+  client: redisClient,
+  ttl: 86400, // 1 day expiration
+});
 
 app.use(
   session({
@@ -23,20 +35,16 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 24 * 60 * 60 * 1000 },
+    store: sessionStore,
   })
 );
 
-// app.use(morgan("combined"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-// views
-
 app.set("view engine", "ejs");
 app.set("views", "./views");
 app.use(express.static("public"));
 
-// Thêm middleware để cấu hình CORS
 app.use(cors());
 
 app.use(function (req, res, next) {
@@ -58,25 +66,19 @@ app.use(function (req, res, next) {
   next();
 });
 
-// routes
-
 app.use("/", webRoutes);
 app.use("/admin", adminRoutes);
 app.use("/api", apiRoutes);
-
-// middleware
 
 app.use((req, res) => {
   return res.render("404");
 });
 
-// connect
-
 mongoose
   .connect(process.env.MONGODB)
-  .then((result) => {
+  .then(() => {
     app.listen(port, () => {
-      console.log(`ứng dụng đang chạy với port: ${port}`);
+      console.log(`Server is running on port: ${port}`);
     });
   })
   .catch((err) => {
