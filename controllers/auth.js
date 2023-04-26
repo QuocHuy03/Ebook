@@ -55,7 +55,7 @@ exports.loginUser = (req, res, next) => {
             message: "Tài khoản không tồn tại",
           });
         }
-        if(password === user.password) {
+        if (password === user.password) {
           if (err) {
             return res
               .status(401)
@@ -78,8 +78,9 @@ exports.loginUser = (req, res, next) => {
               .status(200)
               .json({ status: false, message: "Đăng nhập thất bại" });
           }
-        });
+        }
       })
+
       .catch((err) => {
         if (!err.statusCode) {
           err.statusCode = 500;
