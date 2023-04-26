@@ -22,6 +22,28 @@ const redisClient = redis.createClient({
 // Session store
 const sessionStore = new RedisStore({ client: redisClient });
 
+redisClient.on("error", (err) => {
+  console.log(`Redis error: ${err}`);
+});
+
+redisClient.on("ready", () => {
+  console.log("Redis is ready");
+
+  // MongoDB connection
+  mongoose
+    .connect(process.env.MONGODB)
+    .then(() => {
+      console.log("MongoDB is ready");
+
+      app.listen(port, () => {
+        console.log(`Server is running on port: ${port}`);
+      });
+    })
+    .catch((err) => {
+      console.log(`MongoDB error: ${err}`);
+    });
+});
+
 app.use(
   session({
     secret: "mysecretkey",
@@ -66,14 +88,3 @@ app.use("/api", apiRoutes);
 app.use((req, res) => {
   return res.render("404");
 });
-
-mongoose
-  .connect(process.env.MONGODB)
-  .then(() => {
-    app.listen(port, () => {
-      console.log(`Server is running on port: ${port}`);
-    });
-  })
-  .catch((err) => {
-    console.log(err);
-  });
