@@ -13,18 +13,10 @@ exports.createUser = (req, res, next) => {
         .status(200)
         .json({ status: false, message: "Mật khẩu nhập lại không khớp!" });
     } else {
-      // Mã hóa mật khẩu
-      bcrypt.hash(password, 10, (err, hash) => {
-        if (err) {
-          return res.status(500).json({
-            status: false,
-            message: "Có lỗi xảy ra trong quá trình mã hóa mật khẩu",
-          });
-        }
         var token = random(24);
         const users = new User({
           fullname,
-          password: hash,
+          password,
           email,
           token: token,
         });
@@ -45,7 +37,6 @@ exports.createUser = (req, res, next) => {
             next(err);
           });
       });
-    }
   }
 };
 // login
@@ -64,7 +55,7 @@ exports.loginUser = (req, res, next) => {
             message: "Tài khoản không tồn tại",
           });
         }
-        bcrypt.compare(password, user.password, (err, result) => {
+        if(password === user.password) {
           if (err) {
             return res
               .status(401)
