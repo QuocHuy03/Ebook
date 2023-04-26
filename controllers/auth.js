@@ -35,7 +35,8 @@ exports.createUser = (req, res, next) => {
             }
             next(err);
           });
-      });
+        }
+        
   }
 };
 // login
