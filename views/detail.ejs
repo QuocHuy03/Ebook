@@ -31,7 +31,11 @@
         <!-- Product Details Slider Big Image-->
         <div class="product-details-slider sb-slick-slider arrow-type-two">
           <div class="single-slide">
-            <img src="<%= detailProducts.image %>" alt="">
+             <% if (detailProducts && detailProducts.image) { %>
+      <img src="<%= detailProducts.image %>" alt="">
+    <% } else { %>
+      <p>No image available</p>
+    <% } %>
           </div>
         </div>
       </div>
