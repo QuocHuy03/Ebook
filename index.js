@@ -1,7 +1,5 @@
 const express = require("express");
 const session = require("express-session");
-const RedisStore = require("connect-redis")(session);
-const redis = require("redis");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -14,20 +12,6 @@ const apiRoutes = require("./routes/api");
 const app = express();
 const port = process.env.PORT || 1234;
 
-// Redis client
-const redisClient = redis.createClient({
-  url: process.env.REDIS_URL,
-});
-
-// Session store
-const sessionStore = new RedisStore({ client: redisClient });
-
-redisClient.on("error", (err) => {
-  console.log(`Redis error: ${err}`);
-});
-
-redisClient.on("ready", () => {
-  console.log("Redis is ready");
 
   // MongoDB connection
   mongoose
@@ -42,17 +26,13 @@ redisClient.on("ready", () => {
     .catch((err) => {
       console.log(`MongoDB error: ${err}`);
     });
-});
 
-app.use(
-  session({
-    secret: "mysecretkey",
-    resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 24 * 60 * 60 * 1000 },
-    store: sessionStore,
-  })
-);
+
+app.use(session({
+    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+    saveUninitialized: false,
+    resave: false
+}));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
