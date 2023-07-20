@@ -43,7 +43,6 @@ exports.createUser = (req, res, next) => {
 
 exports.loginUser = (req, res, next) => {
   const { email, password } = req.body;
-  console.log(req.body);
   if (email == "" || password == "") {
     res.status(200).json({ status: false, message: "Không Được Để Trống" });
   } else {
@@ -82,6 +81,7 @@ exports.loginUser = (req, res, next) => {
       })
 
       .catch((err) => {
+        console.log(err);
         if (!err.statusCode) {
           err.statusCode = 500;
         }
