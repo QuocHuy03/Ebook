@@ -54,6 +54,7 @@ exports.loginUser = (req, res, next) => {
             message: "Tài khoản không tồn tại",
           });
         }
+        console.log(user);
         if (password === user.password) {
           if (err) {
             return res
