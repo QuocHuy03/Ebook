@@ -1,3 +1,6 @@
+const User = require("../models/user");
+const random = require("random-token");
+
 exports.createUser = (req, res, next) => {
   const { fullname, password, repassword, email } = req.body;
   if (fullname == "" || password == "" || repassword == "" || email == "") {
