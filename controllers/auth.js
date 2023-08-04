@@ -26,14 +26,12 @@ exports.createUser = (req, res, next) => {
           email,
           token: token,
         });
-        console.log("Register : ", users);
         users
           .save()
           .then((result) => {
             res.status(201).json({
               status: true,
               message: "Đăng Ký Thành Công",
-              info: result,
             });
           })
           .catch((err) => {
@@ -60,32 +58,29 @@ exports.loginUser = (req, res, next) => {
             message: "Tài khoản không tồn tại",
           });
         }
-   
+
         if (password === user.password) {
-          
-            req.session.loggedin = true;
-            req.session.email = email;
+          req.session.loggedin = true;
+          req.session.email = email;
 
-            res.locals.email = email; // lưu trữ email đã đăng nhập và truyền vào một biến locals
+          res.locals.email = email; 
 
-            console.log(res.locals.email);
-            return res.status(200).json({
-              status: true,
-              message: "Đăng nhập thành công",
-              info: user,
-            });
-          } else {
-            return res
-              .status(200)
-              .json({ status: false, message: "Đăng nhập thất bại" });
-          }
-        })
-        .catch((err) => {
-          if (!err.statusCode) {
-            err.statusCode = 500;
-          }
-          next(err);
-        });
-      }
-
+          console.log(res.locals.email);
+          return res.status(200).json({
+            status: true,
+            message: "Đăng nhập thành công",
+          });
+        } else {
+          return res
+            .status(200)
+            .json({ status: false, message: "Đăng nhập thất bại" });
+        }
+      })
+      .catch((err) => {
+        if (!err.statusCode) {
+          err.statusCode = 500;
+        }
+        next(err);
+      });
   }
+};
